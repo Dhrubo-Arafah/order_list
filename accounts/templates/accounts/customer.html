@@ -1,0 +1,100 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+    <main>
+        {% include 'accounts/sidebar.html' %}
+        <div class="cards">
+            <div class="card-single customer">
+                <div class="">
+                    <h1>{{ customer.name }}</h1>
+                    <p>Member Since : {{ customer.date_created }}</p>
+                    <h2>Total Orders{{ total_orders }}</h2>
+                </div>
+                <div>
+                    <span id="card-icon" class="las la-users"></span>
+                </div>
+            </div>
+            <div class="card-single product">
+                <div class="">
+                    <h1>Total Orders</h1>
+                    <p>{{ orders.count }}</p>
+                </div>
+                <div>
+                    <span id="card-icon" class="las la-shopping-bag"></span>
+                </div>
+            </div>
+            <div class="card-single order">
+                <div class="">
+                    <h3>About</h3>
+                    <p>Email: {{ customer.email }}</p>
+                    <p>Phone: {{ customer.phone }}</p>
+                    <p>Address: {{ customer.address }}</p>
+                </div>
+                <div>
+                    <span id="card-icon" class="las la-poll"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card card-body">
+            <table id="example" class="table is-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Order ID</td>
+                    <td>Date</td>
+                    <td>Status</td>
+                    <td>Items</td>
+                    <td>Coupon</td>
+                    <td>Amount</td>
+                    <td>Shipping Address</td>
+                    <td>Payment Status</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ order.order }}</td>
+                        <td>{{ order.date_created }}</td>
+                        <td>{% if order.status == 'Shipped' %}
+                            <span class="status text-info">&bull;</span>
+                        {% endif %}
+                            {% if order.status == 'Cancelled' %}
+                                <span class="status text-danger">&bull;</span>
+                            {% endif %}
+                            {% if order.status == 'Pending' %}
+                                <span class="status text-warning">&bull;</span>
+                            {% endif %}
+                            {% if order.status == 'Delivered' %}
+                                <span class="status text-success">&bull;</span>
+                            {% endif %}
+                            {{ order.status }}
+                        </td>
+                        <td><a href="customer/{{ order.customer.id }}">{{ order.customer.name }}<br>
+                            <h6>{{ order.customer.email }}<br>{{ order.customer.address }}</h6></a></td>
+                        <td>{{ order.customer.phone }}</td>
+                        <td>{{ order.quantity }}X{{ order.product }}</td>
+                        <td>{{ order.coupon }}</td>
+                        <td>{{ order.product.price }}/-</td>
+                        <td>{{ order.shipping_address }}</td>
+                        <td>{% if order.payment == 'Paid' %}
+                            <span class="label label-success">{{ order.payment }}</span>
+                        {% endif %}
+                            {% if order.payment == 'Expired' %}
+                                <span class="label label-danger">{{ order.payment }}</span>
+                            {% endif %}
+                            {% if order.payment == 'Pending' %}
+                                <span class="label label-warning">{{ order.payment }}</span>
+                            {% endif %}</td>
+                        <td class="action"><a href="{% url 'update' order.id %}"><span class="las la-pen"></span></a><a
+                                href="{% url 'delete' order.id %}"><span class="las la-eraser"></span></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+{% endblock %}

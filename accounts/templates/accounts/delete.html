@@ -1,0 +1,13 @@
+{% extends 'accounts/main.html'%}
+
+{% block content %}
+    {% include 'accounts/sidebar.html' %}
+    <main>
+    <p>Are you sure you want to delete {{ order.order }}</p>
+    <form action="{% url 'delete' order.id%}" method="post">
+    {% csrf_token %}
+        <a href="{% url 'home'%}">Cancel</a>
+        <input type="submit" value="Confirm">
+    </form>
+    </main>
+{% endblock %}

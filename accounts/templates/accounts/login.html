@@ -1,0 +1,26 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<div class="form">
+    <div class="wrapper">
+        <div class="left">
+            <h2>Let Me In</h2>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi blanditiis, consequatur, culpa,
+                cum dignissimos facere numquam praesentium provident recusandae repellat tempore totam voluptatibus.
+                Temporibus.</p> <br><br><br> <p>New Here? <a href="{% url 'register' %}">Register</a></p>
+        </div>
+
+
+        <div class="right">
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="username">Username:</label><br>
+                <input type="text" name="username" placeholder="John_Doe"><br>
+                <label for="password">Password:</label><br>
+                <input type="password" name="password" placeholder="Your password"><br>
+                <input type="submit" value="I'm in"><br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
