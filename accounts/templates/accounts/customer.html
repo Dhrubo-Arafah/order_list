@@ -7,7 +7,6 @@
                 <div class="">
                     <h1>{{ customer.name }}</h1>
                     <p>Member Since : {{ customer.date_created }}</p>
-                    <h2>Total Orders{{ total_orders }}</h2>
                 </div>
                 <div>
                     <span id="card-icon" class="las la-users"></span>
@@ -72,7 +71,7 @@
                             {% endif %}
                             {{ order.status }}
                         </td>
-                        <td><a href="customer/{{ order.customer.id }}">{{ order.customer.name }}<br>
+                        <td><a href="{{ order.customer.id }}">{{ order.customer.name }}<br>
                             <h6>{{ order.customer.email }}<br>{{ order.customer.address }}</h6></a></td>
                         <td>{{ order.customer.phone }}</td>
                         <td>{{ order.quantity }}X{{ order.product }}</td>

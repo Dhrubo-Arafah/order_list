@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'accounts/main.html' %}
+{% block content %}
+    {% include 'accounts/sidebar.html' %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="/media/{{ user.profile.profile_pic }}" alt="profile picture">
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col border">First Name: <h3>{{ user.first_name }}</h3><br></div>
+                        <div class="col border"> Last Name: <h3>{{ user.last_name }}</h3><br></div>
+                    </div>
+                    <div class="row">
+                        <div class="col border">Username: <h3>{{ user.username }}</h3><br></div>
+                        <div class="col border">UserID: <h3> {{ user.id }}</h3><br></div>
+                    </div>
+                    <div class="row border">
+                        <div class="col">Joined Date: <h6>{{ user.date_joined }}</h6></div>
+                    </div>
+                    <div class="row border">
+                        <div class="col">Address: <h6>{{ user.profile.address }}</h6></div>
+                    </div>
+                    <br><br>
+                    <a href="{% url 'update_profile' %}" class="btn btn-outline-primary btn-lg btn-block">Update
+                        Profile</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,23 +1,23 @@
 {% extends 'accounts/main.html' %}
 {% block content %}
-   {% include 'accounts/sidebar.html' %}
+    {% include 'accounts/sidebar.html' %}
     <main>
-    {% include 'accounts/info.html' %}
+        {% include 'accounts/info.html' %}
         <div class="card-body">
-                 <div class="card-header">
+            <div class="card-header">
                 <h2>ORDERS:</h2>
-                     <div class="button-group">
-                         <a href="">Add Order</a>
-                         <a href="{% url 'home' %}">Refresh</a>
-                         <a href="{% url 'export-csv' %}">Export csv</a>
-                     </div>
+                <div class="button-group">
+                    <a href="{% url 'add_order' %}">Add Order</a>
+                    <a href="{% url 'home' %}">Refresh</a>
+                    <a href="{% url 'export-csv' %}">Export csv</a>
+                </div>
             </div>
-                <table id="example" class="table is-striped" style="width:100%">
-                    <thead>
-                    <tr>
-                        <td>#</td>
-                        <td>Order ID</td>
-                        <td>Date</td>
+            <table id="example" class="table is-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Order ID</td>
+                    <td>Date</td>
                         <td>Status</td>
                         <td>Customer</td>
                         <td>Phone</td>

@@ -1,27 +1,30 @@
-{% extends 'main.html' %}
+{% extends 'accounts/main.html' %}
 {% block content %}
-<div class="form">
-    <div class="wrapper">
-        <div class="left">
-            <h2>Create New Account</h2>
-            <hr>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi blanditiis, consequatur, culpa,
-                cum dignissimos facere numquam praesentium provident recusandae repellat tempore totam voluptatibus.
-                Temporibus.</p> <br><br><br> <p>Already User? <a href="{% url 'home'%}">Login</a></p>
-        </div>
+    <div class="form">
+        <div class="wrapper">
+            <div class="left">
+                <h2>Create New Account</h2>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi blanditiis, consequatur,
+                    culpa,
+                    cum dignissimos facere numquam praesentium provident recusandae repellat tempore totam voluptatibus.
+                    Temporibus.</p> <br><br><br>
+                <p>Already User? <a href="{% url 'home' %}">Login</a></p>
+            </div>
 
 
-        <div class="right">
-            <form action="" method="post">
-                <label for="username">{{ form.username.label }}</label><br>
-                <input type="text" name="username" placeholder="John_Doe" {{ form.username }}><br>
-                <label for="password">{{ form.password1.label }}</label><br>
-                <input type="text" name="password" placeholder="Your password" {{ form.password1 }}><br>
-                <label for="passowrd2">{{ form.password2.label }}</label><br>
-                <input type="text" name="password2" placeholder="Confirm your password" {{ form.password2 }}><br>
-                <input type="submit" value="Count me in"><br>
-            </form>
+            <div class="right">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.username.label }}
+                    {{ form.username }}
+                    {{ form.password1.label }}
+                    {{ form.password1 }}
+                    {{ form.password2.label }}
+                    {{ form.password2 }}
+                    <input type="submit" value="Count me in">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

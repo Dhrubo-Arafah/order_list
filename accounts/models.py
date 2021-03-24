@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import CASCADE
 
 
 class Customer(models.Model):
@@ -60,3 +62,8 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=CASCADE)
+    profile_pic = models.ImageField(upload_to='image/')

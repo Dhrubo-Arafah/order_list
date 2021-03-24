@@ -1,21 +1,19 @@
+import csv
 import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import csv
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
-from .forms import UpdateForm, CreateUserForm
+
+from .forms import UpdateForm, CreateUserForm, EditProfile, ProfileForm, OrderForm
 from .models import *
-from .filters import OrderFilter
 
 
 def register_page(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('/')
     else:
         form = CreateUserForm()
         if request.method == 'POST':
@@ -23,20 +21,21 @@ def register_page(request):
             if form.is_valid():
                 form.save()
                 user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was successfully created for' +user)
-                return redirect ('login')
+                messages.success(request, 'Account was successfully created for' + user)
+                return redirect('login')
 
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
+
 
 def login_page(request):
     if request.user.is_authenticated:
         return redirect('home')
     else:
-        if request.method=='POST':
-            username=request.POST.get('username')
-            password=request.POST.get('password')
-            user=authenticate(request, username=username, password=password)
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('home')
@@ -44,9 +43,12 @@ def login_page(request):
                 messages.info(request, 'Username or Password is incorrect')
         return render(request, 'accounts/login.html')
 
+
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
 
 @login_required(login_url='login')
 def home(request):
@@ -55,16 +57,17 @@ def home(request):
     total_order = orders.count()
     total_customers = customer.count()
     total_delivered = orders.filter(status='Delivered').count()
-    product=Product.objects.all()
-    products=product.count()
+    product = Product.objects.all()
+    products = product.count()
     context = {
         'orders': orders,
         'total_customers': total_customers,
         'total_orders': total_order,
         'total_delivered': total_delivered,
-        'products':products
+        'products': products
     }
     return render(request, 'accounts/dashboard.html', context)
+
 
 @login_required(login_url='login')
 def update(request, id):
@@ -77,6 +80,7 @@ def update(request, id):
             return redirect('/')
     context = {'form': form}
     return render(request, 'accounts/update.html', context)
+
 
 @login_required(login_url='login')
 def delete(request, id):
@@ -105,6 +109,7 @@ def export_csv(request):
 
     return response
 
+
 @login_required(login_url='login')
 def customer(request, id):
     customer = Customer.objects.get(id=id)
@@ -114,3 +119,69 @@ def customer(request, id):
         'customer': customer
     }
     return render(request, 'accounts/customer.html', context)
+
+
+@login_required(login_url='login')
+def profile(request):
+    user = request.user
+    context = {
+        'user': user
+    }
+    return render(request, 'accounts/profile.html', context)
+
+
+@login_required(login_url='login')
+def update_profile(request):
+    profile = Profile.objects.filter(user=request.user).first()
+
+    if request.method == 'POST':
+        form = EditProfile(request.POST, instance=request.user)
+        profle_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid() and profle_form.is_valid():
+            user_form = form.save()
+            custom_form = profle_form.save(False)
+            custom_form.user = user_form
+            custom_form.save()
+            messages.success(request, 'user profile has been updated')
+            return redirect('/')
+        else:
+            messages.error(request, 'Submission Error')
+    if request.method == 'GET':
+        form = EditProfile(instance=request.user)
+        profle_form = ProfileForm(instance=profile)
+        context = {
+            'form': form,
+            'profile_form': profle_form
+        }
+        return render(request, 'accounts/update_profile.html', context)
+
+
+@login_required(login_url='login')
+def all_customer(request):
+    customer = Customer.objects.all()
+    context = {
+        'customers': customer
+    }
+    return render(request, 'accounts/all_customer.html', context)
+
+
+@login_required(login_url='login')
+def all_product(request):
+    product = Product.objects.all()
+    context = {
+        'products': product
+    }
+    return render(request, 'accounts/all_product.html', context)
+
+
+@login_required(login_url='login')
+def add_order(request):
+    order = Order.objects.all()
+    form = OrderForm()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form}
+    return render(request, 'accounts/add_order.html', context)

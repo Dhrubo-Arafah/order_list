@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'accounts/main.html' %}
+{% block content %}
+    {% include 'accounts/sidebar.html' %}
+    <main>
+        <div class="card card-body">
+            <table id="example" class="table is-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Customer ID</td>
+                    <td>Date</td>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>Address</td>
+                    <td>Phone</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for customer in customers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ customer.id }}</td>
+                        <td>{{ customer.date_created }}</td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.email }}</td>
+                        <td>{{ customer.address }}</td>
+                        <td>{{ customer.phone }}</td>
+
+                        <td class="action"><a href="{% url 'update' customer.id %}"><span class="las la-pen"></span></a><a
+                                href="{% url 'delete' customer.id %}"><span class="las la-eraser"></span></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+{% endblock %}
